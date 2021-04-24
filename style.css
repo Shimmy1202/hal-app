@@ -1,0 +1,15 @@
+.grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.item {
+  border-radius: 10px;
+  background: #edf;
+  padding: 15px;
+  text-align: center;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
