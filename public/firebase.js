@@ -1,11 +1,6 @@
-const firebaseConfig = {
-	apiKey: "AIzaSyBvtI__5yv6gsm7hwGhH6eyAIsq3OdPTVs",
-	authDomain: "el4c-4-24.firebaseapp.com",
-	projectId: "el4c-4-24",
-	storageBucket: "el4c-4-24.appspot.com",
-	messagingSenderId: "133756927867",
-	appId: "1:133756927867:web:01b4952517c23745acc7de",
-};
+require("dotenv").config();
+
+const firebaseConfig = {};
 
 firebase.initializeApp(firebaseConfig);
 
@@ -16,60 +11,60 @@ const storageRef = storage.ref();
 const studentsRef = storageRef.child("students");
 
 window.onload = () => {
-	bung();
+  bung();
 };
 const bung = async () => {
-	let filenames = [];
+  let filenames = [];
 
-	const wrapperElm = document.querySelector(".grid");
-	const querySnapshot = await db.collection("kadaihyoushi").get();
+  const wrapperElm = document.querySelector(".grid");
+  const querySnapshot = await db.collection("kadaihyoushi").get();
 
-	querySnapshot.docs.map((doc) => {
-		const data = doc.data();
-		filenames.push(data);
-	});
-	await firebase
-		.auth()
-		.signInAnonymously()
-		.then(() => {})
-		.catch((error) => {
-			var errorCode = error.code;
-			var errorMessage = error.message;
-			// ...
-		});
+  querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    filenames.push(data);
+  });
+  await firebase
+    .auth()
+    .signInAnonymously()
+    .then(() => {})
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
 
-	// Signed in..
-	firebase.auth().onAuthStateChanged((user) => {
-		if (user) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/firebase.User
-			var uid = user.uid;
-			filenames.map((filename) => {
-				console.log(filename);
-				storageRef
-					.child(
-						`kadaihyoshi/${filename.subject}_${filename.number}_${filename.studentNumber}.png`
-					)
-					.getDownloadURL()
-					.then(function (url) {
-						console.log(url);
-						wrapperElm.insertAdjacentHTML(
-							"beforeend",
-							'<div class="item"><img src="' + url + '?alt=media"></div>'
-						);
-					})
-					.catch(function (error) {
-						console.log(error);
+  // Signed in..
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      var uid = user.uid;
+      filenames.map((filename) => {
+        console.log(filename);
+        storageRef
+          .child(
+            `kadaihyoshi/${filename.subject}_${filename.number}_${filename.studentNumber}.png`
+          )
+          .getDownloadURL()
+          .then(function (url) {
+            console.log(url);
+            wrapperElm.insertAdjacentHTML(
+              "beforeend",
+              '<div class="item"><img src="' + url + '?alt=media"></div>'
+            );
+          })
+          .catch(function (error) {
+            console.log(error);
 
-						// Handle any errors
-					});
-			});
-			// ...
-		} else {
-			// User is signed out
-			// ...
-		}
-	});
+            // Handle any errors
+          });
+      });
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 };
 
 // https://firebasestorage.googleapis.com/v0/b/el4c-4-24.appspot.com/o/kadaihyoshi%2FFX41_45_81104.png
